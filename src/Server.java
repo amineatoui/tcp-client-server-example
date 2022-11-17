@@ -138,6 +138,8 @@ public class Server {
     return false;
    }
 
+
+
    
    public static String displayHelp(){
       String help="";
@@ -157,6 +159,8 @@ public class Server {
        help+="  transfert money to an account delimiter";
        help+="OPERATION delimiter";
        help+="  display all recent operations delimiter";
+       help+="DEMANDE_CREDIT [amount] [months] delimiter";
+       help+="  demand a credit  delimiter";
        help+="HELP delimiter";
        help+="  display help delimiter";
 

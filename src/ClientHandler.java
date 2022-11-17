@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.text.DecimalFormat;
 
 import models.Compte;
+import models.Operation;
 import models.User;
 
 //this thread is created each time the serever receives a new socket;
@@ -186,6 +188,35 @@ public class ClientHandler extends Thread {
                             response="you are not connected yet";
                         }   
                     }
+                }
+
+                if (cmd.startsWith("DEMANDE_CREDIT")) {
+                     
+                    User sender=Server.getUserByIpAddress(socket.getInetAddress());
+                    if (sender==null) {
+                         response="you need to create an account first";
+                    } else {
+                        int indexSender=Server.isConnected(sender.getNom());
+                    if (indexSender!=-1) {
+                               String[] arr=cmd.split(" ");
+                               int montant=Integer.parseInt(arr[1]);
+                               int moins=Integer.parseInt(arr[2]);                                   
+                               int years=Math.round(moins/12);
+                               double inter= years*0.12*montant+montant;
+                               DecimalFormat df=new DecimalFormat("0.00");
+                               response="you need to pay "+df.format(inter/moins)+" each month";
+                               Operation op=new Operation();
+                               op.setAmount(montant);
+                               op.setSender(sender);
+                               op.setType("demande_credit");
+                               Server.listOfOps.add(op);
+                            }
+
+                            else {
+                                response="you need to connect first";
+                            }
+                        }                      
+                     
                 }
 
                 if (response.isEmpty()) {
